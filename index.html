@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body,html{height:100%;overflow:hidden;}
+
+.screen{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
+.glass{
+  background:rgba(0,0,0,0.6);
+  padding:25px;
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  max-width:90%;
+}
+
+input{
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-top:15px;
+  width:220px;
+  text-align:center;
+}
+
+.eyeToggle{
+  position:absolute;
+  right:50px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#ff4da6;
+  font-weight:bold;
+}
+
+button{
+  padding:10px 20px;
+  margin-top:15px;
+  border:none;
+  border-radius:20px;
+  background:#ff4da6;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.error{
+  color:#ffb3b3;
+  margin-top:10px;
+  font-size:14px;
+}
+
+h1,h2{
+  font-size:28px;
+  text-shadow:0 0 15px hotpink;
+}
+
+/* SLIDESHOW TEXT */
+#slideText{
+  margin-top:20px;
+  padding:20px;
+  border-radius:20px;
+  background:linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+  font-size:18px;
+  line-height:1.6;
+  text-shadow:0 0 10px hotpink;
+  max-width:90%;
+  opacity:0;
+  transition:opacity 1.5s ease;
+}
+
+/* SLIDE WRAPPER */
+#slideWrapper{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  background-size: cover;
+  background-position: center;
+  transition:transform 6s ease;
+}
+
+/* HEARTS */
+.heart{
+  position:absolute;
+  width:15px;
+  height:15px;
+  background:rgba(255,105,180,0.8);
+  transform:rotate(45deg);
+  animation:floatUp 8s linear infinite;
+  opacity:0.7;
+}
+
+.heart:before,.heart:after{
+  content:"";
+  position:absolute;
+  width:15px;
+  height:15px;
+  background:rgba(255,105,180,0.8);
+  border-radius:50%;
+}
+
+.heart:before{top:-7px;left:0;}
+.heart:after{left:-7px;top:0;}
+
+@keyframes floatUp{
+  0%{transform:translateY(100vh) rotate(45deg);opacity:0;}
+  10%{opacity:0.8;}
+  100%{transform:translateY(-10vh) rotate(45deg);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music1" src="music1.mp3" loop></audio>
+<audio id="music2" src="music2.mp3" loop></audio>
+
+<!-- NAME -->
+<section id="password" class="screen" style="display:flex;background-image:url('bg1.jpg')">
+<div class="glass" style="position:relative;">
+<h2>Enter Your Name</h2>
+<input type="password" id="passInput">
+<span class="eyeToggle" onclick="toggleEye()">👁️</span>
+<br>
+<button onclick="checkPass()">Unlock</button>
+<p id="passError" class="error"></p>
+</div>
+</section>
+
+<!-- QUESTIONS -->
+<section id="q1" class="screen" style="background-image:url('bg2.jpg')">
+<div class="glass">
+<h2>Your BFF’s favourite person?</h2>
+<input id="a1">
+<br><button onclick="checkAnswer(1)">Next</button>
+<p id="e1" class="error"></p>
+</div>
+</section>
+
+<section id="q2" class="screen" style="background-image:url('bg2.jpg')">
+<div class="glass">
+<h2>Favourite dialogue of Ates?</h2>
+<input id="a2">
+<br><button onclick="checkAnswer(2)">Next</button>
+<p id="e2" class="error"></p>
+</div>
+</section>
+
+<section id="q3" class="screen" style="background-image:url('bg2.jpg')">
+<div class="glass">
+<h2>Your BFF’s BFF is?</h2>
+<input id="a3">
+<br><button onclick="checkAnswer(3)">Reveal</button>
+<p id="e3" class="error"></p>
+</div>
+</section>
+
+<!-- COUNTDOWN -->
+<section id="countdown" class="screen" style="background-image:url('bg3.jpg')">
+<div class="glass"><h1 id="countNum">5</h1></div>
+</section>
+
+<!-- BIRTHDAY -->
+<section id="birthday" class="screen" style="background-image:url('birthday.jpg')">
+<div class="glass">
+<h1 style="font-style:italic; text-align:center; font-size:32px;">HAPPY BIRTHDAY 💖</h1>
+<p id="birthdayMsg" style="margin-top:20px; font-size:18px; line-height:1.6; text-align:center;"></p>
+</div>
+</section>
+
+<!-- SLIDESHOW -->
+<section id="slideshow" class="screen">
+<div id="heartsContainer"></div>
+<div id="slideWrapper">
+<h1 id="slideText"></h1>
+</div>
+</section>
+
+<!-- FINAL -->
+<section id="final" class="screen" style="background-image:url('bg4.jpg')">
+<div class="glass">
+<h1>💖HAPPY BIRTHDAY TO MY SUARG SE UTRI APSARA💖</h1>
+<p style="margin-top:15px;font-size:18px; line-height:1.6;">
+I may not say it every day… but you truly mean a lot to me(bohot jyada).<br>
+Life feels lighter, brighter and happier because you exist(ye jyada ho gya syt).<br>
+Friendship like ours is rare and forever(100%💖real).<br>
+Do u know what we are going to complete 2 years without meeting👀<br>
+milna bhi nhi hai i am happy tumse dur rehke🥲<br>
+Tap on Enjoy music,listen and ignore.<br>
+✨See You Soon ✨
+</p>
+<button id="playFinalMusic" style="margin-top:20px; padding:12px 25px; border:none; border-radius:25px; background:linear-gradient(45deg,#ff4e91,#ff9472); color:white; font-size:16px; cursor:pointer;">
+Enjoy Music 🎵
+</button>
+<audio id="finalMusic" src="finalMusic.mp3"></audio>
+</div>
+</section>
+
+<script>
+let music1=document.getElementById("music1");
+let music2=document.getElementById("music2");
+
+function toggleEye(){
+  let inp = document.getElementById("passInput");
+  inp.type = (inp.type === "password") ? "text" : "password";
+}
+
+function checkPass(){
+  let val=document.getElementById("passInput").value.toLowerCase().trim();
+  if(val==="priyanshi"){
+    music1.play();
+    document.getElementById("password").style.display="none";
+    document.getElementById("q1").style.display="flex";
+  } else {
+    document.getElementById("passError").innerHTML="kya hoga tumhara😅";
+  }
+}
+
+// --- Your checkAnswer, startCountdown, showBirthday, startSlideshow functions remain unchanged ---
+
+
+// FINAL MUSIC BUTTON FIX
+document.getElementById("playFinalMusic").addEventListener("click", function(){
+  // Stop previous music
+  [music1, music2].forEach(m => { m.pause(); m.currentTime=0; });
+  
+  // Play final music
+  const finalMusic = document.getElementById("finalMusic");
+  if(finalMusic) finalMusic.play();
+  
+  // Hide button
+  this.style.display="none";
+});
+</script>
+
+</body>
+</html>
